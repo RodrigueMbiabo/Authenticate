@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+//Cette classe est implementer pour avoir des informations supplementaire sur l'utilisateur(Hors mis le nom et le mot de passe deja present dans le UserDetails) comme l'email et l'id
 public class UserDetailsImpl implements UserDetails {
 
     private static final long serialVersionUID = 1L;
@@ -24,6 +25,7 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
+    //Utilisé pour les authorité qui ne sont rien d'autre que les differents roles assigné a un utilisateur
     public Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities){
@@ -34,8 +36,9 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
+    //methode qui nous permet d'avoir les informations au grand complet d'un utilisation (Utilisateur + role ou autorité)
     public static UserDetailsImpl build(User user){
-        List<GrantedAuthority> authorities = user.getRoles().stream()
+        List<GrantedAuthority> authorities = user.getRoles().stream() //Et oui les autorité ne sont que les differents role d'un utilisateurs
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
